@@ -1,23 +1,14 @@
 import { useNavigate } from 'react-router-dom'
-import type { Metier } from '../types/metier'
-
-// Données de démo le temps que Florence branche l'API et que Marly fasse
-// la vraie page liste (recherche, filtres, composants réutilisables).
-const METIERS_DEMO: Metier[] = [
-  {
-    codeRome: 'M1805',
-    intitule: 'Études et développement informatique',
-    description: 'Conception et développement de logiciels et applications.',
-  },
-  {
-    codeRome: 'M1802',
-    intitule: 'Expertise et support en systèmes d\'information',
-    description: 'Support technique et expertise sur les systèmes informatiques.',
-  },
-]
+import { useFetch } from '../hooks/useFetch'
+import { AsyncBoundary } from '../components/AsyncBoundary'
+import { useFavoris } from '../context/FavorisContext'
+import type { FicheMetier } from '../types'
+import { ROME_FICHES_METIERS_LISTE_PATH } from '../api/client'
 
 function MetiersListe() {
   const navigate = useNavigate()
+  const { estFavori, basculerFavori } = useFavoris()
+  const state = useFetch<FicheMetier[]>(ROME_FICHES_METIERS_LISTE_PATH)
 
   // Navigation programmée : au clic, on redirige vers la fiche détail
   // (route avec paramètre :codeRome)
@@ -28,17 +19,28 @@ function MetiersListe() {
   return (
     <section>
       <h1>Liste des métiers</h1>
-      <p>(Page provisoire — la vraie liste avec recherche/filtres sera faite par Marly)</p>
-      <ul>
-        {METIERS_DEMO.map((metier) => (
-          <li key={metier.codeRome}>
-            <span>{metier.intitule}</span>
-            <button type="button" onClick={() => handleVoirFiche(metier.codeRome)}>
-              Voir la fiche
-            </button>
-          </li>
-        ))}
-      </ul>
+      <p>(Recherche/filtres à venir — Marly)</p>
+      <AsyncBoundary state={state} loadingMessage="Chargement des métiers…">
+        {(fiches) => (
+          <ul>
+            {fiches.map((fiche) => (
+              <li key={fiche.code}>
+                <span>{fiche.metier.libelle}</span>
+                <button type="button" onClick={() => handleVoirFiche(fiche.code)}>
+                  Voir la fiche
+                </button>
+                <button
+                  type="button"
+                  onClick={() => basculerFavori(fiche.code)}
+                  aria-pressed={estFavori(fiche.code)}
+                >
+                  {estFavori(fiche.code) ? '★ Favori' : '☆ Ajouter aux favoris'}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </AsyncBoundary>
     </section>
   )
 }
