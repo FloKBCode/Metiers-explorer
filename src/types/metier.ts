@@ -1,17 +1,8 @@
-// Types TS partagés pour l'appli Métiers Explorer.
-// Base à ajuster ensemble une fois la vraie réponse de l'API ROME 4.0 connue
-// (Florence, une fois l'intégration API faite).
-
-export interface Metier {
-  codeRome: string;
-  intitule: string;
-  description: string;
-  domaine?: string;
-}
-
-// Forme générique utilisée par le hook useFetch<T> (Florence)
-export interface FetchState<T> {
-  data: T | null;
-  loading: boolean;
-  error: string | null;
-}
+// ⚠️ Fichier obsolète — conservé pour l'instant uniquement parce qu'un
+// conflit de casse Windows (Metier.ts / metier.ts pointent vers le même
+// fichier physique sur un disque insensible à la casse, alors que git les
+// suit comme deux fichiers distincts) empêche sa suppression propre depuis
+// certains outils. Le vrai type `Metier` (+ FicheMetier, RequestState...)
+// vit désormais dans src/types/index.ts — n'importez plus rien d'ici.
+// À nettoyer depuis un terminal local : `git rm src/types/Metier.ts src/types/metier.ts`
+export {};
