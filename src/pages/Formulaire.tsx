@@ -1,14 +1,15 @@
-import { useState, type FormEvent } from 'react';
+﻿import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Metier } from '../types/metier';
-
-// TODO: remplacer par la vraie liste de métiers venant du Context/hook de Florence
-const metiersDisponibles: Metier[] = [];
+import { useFetch } from '../hooks/useFetch';
+import { AsyncBoundary } from '../components/AsyncBoundary';
+import type { FicheMetier } from '../types';
+import { ROME_FICHES_METIERS_LISTE_PATH } from '../api/client';
 
 export default function Formulaire() {
   const [codeMetier, setCodeMetier] = useState('');
   const [erreur, setErreur] = useState('');
   const navigate = useNavigate();
+  const state = useFetch<FicheMetier[]>(ROME_FICHES_METIERS_LISTE_PATH);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -26,31 +27,35 @@ export default function Formulaire() {
     <div className="page-formulaire">
       <h1>Choisir un métier à consulter</h1>
 
-      <form onSubmit={handleSubmit} className="formulaire-selection">
-        <div>
-          <label htmlFor="metier">Métier</label>
-          <select
-            id="metier"
-            value={codeMetier}
-            onChange={(e) => setCodeMetier(e.target.value)}
-          >
-            <option value="">-- Choisir un métier --</option>
-            {metiersDisponibles.map((metier) => (
-              <option key={metier.codeRome} value={metier.codeRome}>
-                {metier.intitule}
-              </option>
-            ))}
-          </select>
-        </div>
+      <AsyncBoundary state={state} loadingMessage="Chargement de la liste des métiers…">
+        {(fiches) => (
+          <form onSubmit={handleSubmit} className="formulaire-selection">
+            <div>
+              <label htmlFor="metier">Métier</label>
+              <select
+                id="metier"
+                value={codeMetier}
+                onChange={(e) => setCodeMetier(e.target.value)}
+              >
+                <option value="">-- Choisir un métier --</option>
+                {fiches.map((fiche) => (
+                  <option key={fiche.code} value={fiche.code}>
+                    {fiche.metier.libelle}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        {erreur && (
-          <p role="alert" className="erreur">
-            {erreur}
-          </p>
+            {erreur && (
+              <p role="alert" className="erreur">
+                {erreur}
+              </p>
+            )}
+
+            <button type="submit">Voir la fiche métier</button>
+          </form>
         )}
-
-        <button type="submit">Voir la fiche métier</button>
-      </form>
+      </AsyncBoundary>
     </div>
   );
 }

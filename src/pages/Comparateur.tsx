@@ -1,9 +1,9 @@
-import { useState, type FormEvent } from 'react';
-import type { Metier } from '../types/metier';
+﻿import { useState, type FormEvent } from 'react';
+import { useFetch } from '../hooks/useFetch';
+import { AsyncBoundary } from '../components/AsyncBoundary';
+import type { FicheMetier, Metier } from '../types';
+import { ROME_FICHES_METIERS_LISTE_PATH } from '../api/client';
 import MetierCompareCard from '../components/MetierCompareCard';
-
-// TODO: remplacer par la vraie liste de métiers venant du Context/hook de Florence
-const metiersDisponibles: Metier[] = [];
 
 export default function Comparateur() {
   const [codeMetier1, setCodeMetier1] = useState('');
@@ -11,8 +11,9 @@ export default function Comparateur() {
   const [erreur, setErreur] = useState('');
   const [metier1, setMetier1] = useState<Metier | null>(null);
   const [metier2, setMetier2] = useState<Metier | null>(null);
+  const state = useFetch<FicheMetier[]>(ROME_FICHES_METIERS_LISTE_PATH);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>, fiches: FicheMetier[]) {
     event.preventDefault();
 
     if (!codeMetier1 || !codeMetier2) {
@@ -25,71 +26,61 @@ export default function Comparateur() {
       return;
     }
 
-    const m1 = metiersDisponibles.find((m) => m.codeRome === codeMetier1);
-    const m2 = metiersDisponibles.find((m) => m.codeRome === codeMetier2);
+    const f1 = fiches.find((f) => f.code === codeMetier1);
+    const f2 = fiches.find((f) => f.code === codeMetier2);
 
-    if (!m1 || !m2) {
+    if (!f1 || !f2) {
       setErreur('Un des métiers sélectionnés est introuvable.');
       return;
     }
 
     setErreur('');
-    setMetier1(m1);
-    setMetier2(m2);
+    setMetier1({ codeRome: f1.code, libelle: f1.metier.libelle });
+    setMetier2({ codeRome: f2.code, libelle: f2.metier.libelle });
   }
 
   return (
     <div className="page-comparateur">
       <h1>Comparateur de métiers</h1>
 
-      <form onSubmit={handleSubmit} className="formulaire-comparateur">
-        <div>
-          <label htmlFor="metier1">Premier métier</label>
-          <select
-            id="metier1"
-            value={codeMetier1}
-            onChange={(e) => setCodeMetier1(e.target.value)}
-          >
-            <option value="">-- Choisir un métier --</option>
-            {metiersDisponibles.map((metier) => (
-              <option key={metier.codeRome} value={metier.codeRome}>
-                {metier.intitule}
-              </option>
-            ))}
-          </select>
-        </div>
+      <AsyncBoundary state={state} loadingMessage="Chargement de la liste des métiers…">
+        {(fiches) => (
+          <>
+            <form onSubmit={(e) => handleSubmit(e, fiches)} className="formulaire-comparateur">
+              <div>
+                <label htmlFor="metier1">Premier métier</label>
+                <select id="metier1" value={codeMetier1} onChange={(e) => setCodeMetier1(e.target.value)}>
+                  <option value="">-- Choisir un métier --</option>
+                  {fiches.map((fiche) => (
+                    <option key={fiche.code} value={fiche.code}>{fiche.metier.libelle}</option>
+                  ))}
+                </select>
+              </div>
 
-        <div>
-          <label htmlFor="metier2">Deuxième métier</label>
-          <select
-            id="metier2"
-            value={codeMetier2}
-            onChange={(e) => setCodeMetier2(e.target.value)}
-          >
-            <option value="">-- Choisir un métier --</option>
-            {metiersDisponibles.map((metier) => (
-              <option key={metier.codeRome} value={metier.codeRome}>
-                {metier.intitule}
-              </option>
-            ))}
-          </select>
-        </div>
+              <div>
+                <label htmlFor="metier2">Deuxième métier</label>
+                <select id="metier2" value={codeMetier2} onChange={(e) => setCodeMetier2(e.target.value)}>
+                  <option value="">-- Choisir un métier --</option>
+                  {fiches.map((fiche) => (
+                    <option key={fiche.code} value={fiche.code}>{fiche.metier.libelle}</option>
+                  ))}
+                </select>
+              </div>
 
-        {erreur && (
-          <p role="alert" className="erreur">
-            {erreur}
-          </p>
+              {erreur && <p role="alert" className="erreur">{erreur}</p>}
+
+              <button type="submit">Comparer</button>
+            </form>
+
+            {metier1 && metier2 && (
+              <div className="comparateur-resultats">
+                <MetierCompareCard metier={metier1} />
+                <MetierCompareCard metier={metier2} />
+              </div>
+            )}
+          </>
         )}
-
-        <button type="submit">Comparer</button>
-      </form>
-
-      {metier1 && metier2 && (
-        <div className="comparateur-resultats">
-          <MetierCompareCard metier={metier1} />
-          <MetierCompareCard metier={metier2} />
-        </div>
-      )}
+      </AsyncBoundary>
     </div>
   );
 }

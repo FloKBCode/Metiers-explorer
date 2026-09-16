@@ -24,7 +24,13 @@ export async function getAccessToken(): Promise<string> {
     grant_type: "client_credentials",
     client_id: clientId,
     client_secret: clientSecret,
-    scope: "api_romev1 nomenclatureRome", // adapte selon tes vraies souscriptions
+    // ⚠️ Scope à confirmer : une fois ton appli souscrite à "ROME 4.0 –
+    // Fiches métiers" sur francetravail.io (Mes applications), le scope
+    // exact est affiché sur la page de l'appli. Le format standard FT est
+    // "api_[identifiant-produit][version]", ce qui donne ici a priori
+    // "api_romefichesmetiersv1" — à copier-coller depuis ton espace si
+    // différent.
+    scope: "api_romefichesmetiersv1",
   });
 
   const response = await fetch(tokenUrl, {

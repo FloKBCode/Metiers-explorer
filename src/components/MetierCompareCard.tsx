@@ -1,4 +1,4 @@
-import type { Metier } from '../types/metier';
+﻿import type { Metier } from '../types';
 
 interface MetierCompareCardProps {
   metier: Metier;
@@ -7,14 +7,8 @@ interface MetierCompareCardProps {
 export default function MetierCompareCard({ metier }: MetierCompareCardProps) {
   return (
     <div className="metier-compare-card">
-      <h3>{metier.intitule}</h3>
+      <h3>{metier.libelle}</h3>
       <p className="metier-code">Code ROME : {metier.codeRome}</p>
-
-      {metier.domaine && (
-        <p><strong>Domaine :</strong> {metier.domaine}</p>
-      )}
-
-      <p>{metier.description}</p>
     </div>
   );
 }
