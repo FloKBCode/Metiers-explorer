@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+﻿import { useNavigate } from 'react-router-dom'
 import { useFetch } from '../hooks/useFetch'
 import { AsyncBoundary } from '../components/AsyncBoundary'
 import { useFavoris } from '../context/FavorisContext'
@@ -10,8 +10,6 @@ function MetiersListe() {
   const { estFavori, basculerFavori } = useFavoris()
   const state = useFetch<FicheMetier[]>(ROME_FICHES_METIERS_LISTE_PATH)
 
-  // Navigation programmée : au clic, on redirige vers la fiche détail
-  // (route avec paramètre :codeRome)
   const handleVoirFiche = (codeRome: string) => {
     navigate(`/metiers/${codeRome}`)
   }
