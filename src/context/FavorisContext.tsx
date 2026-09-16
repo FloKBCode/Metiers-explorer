@@ -22,6 +22,8 @@ interface FavorisContextValue {
   state: FavorisState;
   addFavori: (code: string) => void;
   removeFavori: (code: string) => void;
+  estFavori: (code: string) => boolean;
+  basculerFavori: (code: string) => void;
 }
 
 const FavorisContext = createContext<FavorisContextValue | null>(null);
@@ -29,10 +31,17 @@ const FavorisContext = createContext<FavorisContextValue | null>(null);
 export function FavorisProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(favorisReducer, { codes: [] });
 
+  const addFavori = (code: string) => dispatch({ type: "ADD", code });
+  const removeFavori = (code: string) => dispatch({ type: "REMOVE", code });
+  const estFavori = (code: string) => state.codes.includes(code);
+  const basculerFavori = (code: string) => (estFavori(code) ? removeFavori(code) : addFavori(code));
+
   const value: FavorisContextValue = {
     state,
-    addFavori: (code) => dispatch({ type: "ADD", code }),
-    removeFavori: (code) => dispatch({ type: "REMOVE", code }),
+    addFavori,
+    removeFavori,
+    estFavori,
+    basculerFavori,
   };
 
   return <FavorisContext.Provider value={value}>{children}</FavorisContext.Provider>;
