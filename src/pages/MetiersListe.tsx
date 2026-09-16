@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import type { Metier } from '../types/metier'
+import type { Metier } from ../types'
 
 // Données de démo le temps que Florence branche l'API et que Marly fasse
 // la vraie page liste (recherche, filtres, composants réutilisables).
