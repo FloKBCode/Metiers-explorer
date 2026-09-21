@@ -1,18 +1,30 @@
-import { useState, type FormEvent } from 'react';
-import type { Metier } from '../types/metier';
+import { useState, useEffect, type FormEvent } from 'react';
+import type { Metier } from '../types/Metier';
+import type { RequestState } from '../types';
+import { metiersMock } from '../data/metiersMock';
 import MetierCompareCard from '../components/MetierCompareCard';
 
-// TODO: remplacer par la vraie liste de métiers venant du Context/hook de Florence
-const metiersDisponibles: Metier[] = [];
-
 export default function Comparateur() {
+  const [etat, setEtat] = useState<RequestState<Metier[]>>({ status: 'idle' });
   const [codeMetier1, setCodeMetier1] = useState('');
   const [codeMetier2, setCodeMetier2] = useState('');
   const [erreur, setErreur] = useState('');
   const [metier1, setMetier1] = useState<Metier | null>(null);
   const [metier2, setMetier2] = useState<Metier | null>(null);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    setEtat({ status: 'loading' });
+
+    // TODO: remplacer par le vrai hook de Florence (apiFetch<Metier[]>('/metiers'))
+    // quand il sera disponible. Le setTimeout simule juste la latence réseau.
+    const timer = setTimeout(() => {
+      setEtat({ status: 'success', data: metiersMock });
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>, metiers: Metier[]) {
     event.preventDefault();
 
     if (!codeMetier1 || !codeMetier2) {
@@ -25,8 +37,8 @@ export default function Comparateur() {
       return;
     }
 
-    const m1 = metiersDisponibles.find((m) => m.codeRome === codeMetier1);
-    const m2 = metiersDisponibles.find((m) => m.codeRome === codeMetier2);
+    const m1 = metiers.find((m) => m.code === codeMetier1);
+    const m2 = metiers.find((m) => m.code === codeMetier2);
 
     if (!m1 || !m2) {
       setErreur('Un des métiers sélectionnés est introuvable.');
@@ -38,11 +50,31 @@ export default function Comparateur() {
     setMetier2(m2);
   }
 
+  if (etat.status === 'idle' || etat.status === 'loading') {
+    return (
+      <div className="page-comparateur">
+        <h1>Comparateur de métiers</h1>
+        <p>Chargement des métiers...</p>
+      </div>
+    );
+  }
+
+  if (etat.status === 'error') {
+    return (
+      <div className="page-comparateur">
+        <h1>Comparateur de métiers</h1>
+        <p role="alert" className="erreur">{etat.error}</p>
+      </div>
+    );
+  }
+
+  const metiers = etat.data;
+
   return (
     <div className="page-comparateur">
       <h1>Comparateur de métiers</h1>
 
-      <form onSubmit={handleSubmit} className="formulaire-comparateur">
+      <form onSubmit={(e) => handleSubmit(e, metiers)} className="formulaire-comparateur">
         <div>
           <label htmlFor="metier1">Premier métier</label>
           <select
@@ -51,9 +83,9 @@ export default function Comparateur() {
             onChange={(e) => setCodeMetier1(e.target.value)}
           >
             <option value="">-- Choisir un métier --</option>
-            {metiersDisponibles.map((metier) => (
-              <option key={metier.codeRome} value={metier.codeRome}>
-                {metier.intitule}
+            {metiers.map((metier) => (
+              <option key={metier.code} value={metier.code}>
+                {metier.libelle}
               </option>
             ))}
           </select>
@@ -67,9 +99,9 @@ export default function Comparateur() {
             onChange={(e) => setCodeMetier2(e.target.value)}
           >
             <option value="">-- Choisir un métier --</option>
-            {metiersDisponibles.map((metier) => (
-              <option key={metier.codeRome} value={metier.codeRome}>
-                {metier.intitule}
+            {metiers.map((metier) => (
+              <option key={metier.code} value={metier.code}>
+                {metier.libelle}
               </option>
             ))}
           </select>
