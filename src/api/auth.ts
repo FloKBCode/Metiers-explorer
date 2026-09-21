@@ -20,12 +20,24 @@ export async function getAccessToken(): Promise<string> {
     throw new Error("Variables d'environnement API manquantes. Vérifie ton fichier .env");
   }
 
-  const body = new URLSearchParams({
+  const params: Record<string, string> = {
     grant_type: "client_credentials",
     client_id: clientId,
     client_secret: clientSecret,
-    scope: "api_romev1 nomenclatureRome", // adapte selon tes vraies souscriptions
-  });
+  };
+
+  // Scopes requis pour "ROME 4.0 - Fiches métiers" (visibles sur la page
+  // "Utiliser l'API" > Client Credentials OAuth Flow, une fois l'API
+  // souscrite) : api_rome-fiches-metiersv1 (obligatoire, donne accès à
+  // l'API) + nomenclatureRome (obligatoire, donne accès aux libellés du
+  // référentiel Métiers utilisés dans les réponses). Surchargeable via
+  // VITE_FT_SCOPE dans .env si jamais ça change.
+  const scope = import.meta.env.VITE_FT_SCOPE || "api_rome-fiches-metiersv1 nomenclatureRome";
+  if (scope) {
+    params.scope = scope;
+  }
+
+  const body = new URLSearchParams(params);
 
   const response = await fetch(tokenUrl, {
     method: "POST",
