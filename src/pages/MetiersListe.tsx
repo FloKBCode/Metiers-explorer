@@ -1,46 +1,50 @@
-import { useNavigate } from 'react-router-dom'
-import type { Metier } from ../types'
-
-// Données de démo le temps que Florence branche l'API et que Marly fasse
-// la vraie page liste (recherche, filtres, composants réutilisables).
-const METIERS_DEMO: Metier[] = [
-  {
-    codeRome: 'M1805',
-    intitule: 'Études et développement informatique',
-    description: 'Conception et développement de logiciels et applications.',
-  },
-  {
-    codeRome: 'M1802',
-    intitule: 'Expertise et support en systèmes d\'information',
-    description: 'Support technique et expertise sur les systèmes informatiques.',
-  },
-]
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useFetch } from '../hooks/useFetch';
+import type { Metier } from '../types';
+import { CarteMetier } from '../components/CarteMetier';
 
 function MetiersListe() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [recherche, setRecherche] = useState('');
+  const etat = useFetch<Metier[]>('/rome/v1/metiers');
 
-  // Navigation programmée : au clic, on redirige vers la fiche détail
-  // (route avec paramètre :codeRome)
-  const handleVoirFiche = (codeRome: string) => {
-    navigate(`/metiers/${codeRome}`)
+  const handleVoirFiche = (code: string) => {
+    navigate(`/metiers/${code}`);
+  };
+
+  if (etat.status === 'idle' || etat.status === 'loading') {
+    return <p>Chargement...</p>;
   }
+
+  if (etat.status === 'error') {
+    return <p>Erreur : {etat.error}</p>;
+  }
+
+  const metiersFiltres = etat.data.filter((m) =>
+    m.libelle.toLowerCase().includes(recherche.toLowerCase())
+  );
 
   return (
     <section>
       <h1>Liste des métiers</h1>
-      <p>(Page provisoire — la vraie liste avec recherche/filtres sera faite par Marly)</p>
-      <ul>
-        {METIERS_DEMO.map((metier) => (
-          <li key={metier.codeRome}>
-            <span>{metier.intitule}</span>
-            <button type="button" onClick={() => handleVoirFiche(metier.codeRome)}>
-              Voir la fiche
-            </button>
-          </li>
+      <input
+        type="text"
+        placeholder="Rechercher un métier..."
+        value={recherche}
+        onChange={(e) => setRecherche(e.target.value)}
+      />
+      <div className="liste-metiers">
+        {metiersFiltres.map((metier) => (
+          <CarteMetier
+            key={metier.code}
+            metier={metier}
+            onClick={() => handleVoirFiche(metier.code)}
+          />
         ))}
-      </ul>
+      </div>
     </section>
-  )
+  );
 }
 
-export default MetiersListe
+export default MetiersListe;

@@ -1,4 +1,4 @@
-import type { Metier } from '../types/Metier';
+import type { Metier } from '../types';
 
 interface CarteMetierProps {
   metier: Metier;
@@ -9,7 +9,6 @@ export function CarteMetier({ metier, onClick }: CarteMetierProps) {
   return (
     <div className="carte-metier" onClick={onClick}>
       <h3>{metier.libelle}</h3>
-      {metier.description && <p>{metier.description}</p>}
     </div>
   );
 }
