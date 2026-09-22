@@ -14,6 +14,24 @@
       href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // Applique le thème choisi avant le premier rendu, pour éviter un flash
+      // clair -> sombre au chargement (voir src/hooks/useTheme.ts).
+      (function () {
+        try {
+          var stocke = localStorage.getItem('atlas-theme');
+          var theme =
+            stocke === 'light' || stocke === 'dark'
+              ? stocke
+              : window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          // pas grave si le stockage est indisponible (navigation privée...)
+        }
+      })();
+    </script>
     <title>Atlas des métiers</title>
   </head>
   <body>

@@ -696,3 +696,72 @@ select.input {
   padding-block: var(--space-8);
   text-align: center;
 }
+
+/* ================= Bouton de thème (soleil / lune) ================= */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  flex-shrink: 0;
+}
+
+.theme-toggle button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.theme-toggle button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.theme-toggle button.is-active {
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+}
+
+.theme-toggle button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ================= Badge de compteur (nav) ================= */
+.nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 5px;
+  margin-left: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+@media (max-width: 700px) {
+  .site-header .container {
+    flex-wrap: wrap;
+    row-gap: var(--space-2);
+  }
+  .site-nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}

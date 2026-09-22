@@ -1,4 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { ThemeToggle } from '../components/ThemeToggle'
+import { useFavoris } from '../context/FavorisContext'
 
 function BrandMark() {
   return (
@@ -17,6 +19,8 @@ function BrandMark() {
 }
 
 function Layout() {
+  const { state } = useFavoris()
+
   return (
     <div className="app-layout">
       <header className="site-header">
@@ -41,7 +45,13 @@ function Layout() {
             <NavLink to="/comparateur" className={({ isActive }) => (isActive ? 'active' : undefined)}>
               Comparer
             </NavLink>
+            <NavLink to="/favoris" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+              Favoris
+              {state.codes.length > 0 && <span className="nav-badge">{state.codes.length}</span>}
+            </NavLink>
           </nav>
+
+          <ThemeToggle />
         </div>
       </header>
 

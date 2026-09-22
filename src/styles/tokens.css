@@ -3,27 +3,30 @@
   Univers cartographie / réseau / exploration — voir la charte partagée par Florence.
   Toutes les couleurs et rythmes de l'appli passent par ces tokens :
   on ne remet jamais une couleur en dur dans un composant.
+
+  Thème : clair par défaut, sombre soit via préférence système, soit via le
+  bouton soleil/lune (data-theme sur <html>, voir useTheme / ThemeToggle).
 */
 
 :root {
-  /* --- Couleurs de marque --- */
+  /* --- Couleurs de marque (communes aux deux thèmes) --- */
+  --color-corail: #e74c3c;
+  --color-violet: #6055f5;
+  --color-vert: #c7f56f;
+  --color-bleu: #46b7e8;
+
+  /* --- Thème clair (valeurs par défaut) --- */
   --color-paper: #f6f1e8;
   --color-paper-raised: #fffdf8;
   --color-ink: #111827;
   --color-ink-soft: #4b5061;
   --color-line: #c9c4ba;
   --color-line-soft: #ddd8cd;
-
-  --color-corail: #e74c3c;
   --color-corail-soft: #fbe2de;
-  --color-violet: #6055f5;
   --color-violet-soft: #e6e4fd;
-  --color-vert: #c7f56f;
   --color-vert-ink: #3c5514;
-  --color-bleu: #46b7e8;
   --color-bleu-soft: #dcf1fb;
 
-  /* --- Rôles sémantiques (ce que les composants utilisent) --- */
   --bg: var(--color-paper);
   --bg-raised: var(--color-paper-raised);
   --bg-ink: var(--color-ink);
@@ -42,11 +45,9 @@
 
   --focus-ring: 0 0 0 3px rgba(96, 85, 245, 0.35);
 
-  /* --- Typo --- */
   --font-display: 'Sora', system-ui, 'Segoe UI', sans-serif;
   --font-text: 'Inter', system-ui, 'Segoe UI', sans-serif;
 
-  /* --- Rythme / forme --- */
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 24px;
@@ -69,8 +70,9 @@
   color-scheme: light;
 }
 
+/* --- Thème sombre : suit le système tant que rien n'est choisi à la main --- */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #14140f;
     --bg-raised: #1c1c16;
     --bg-ink: #0b0b08;
@@ -90,4 +92,35 @@
 
     color-scheme: dark;
   }
+}
+
+/* --- Thème sombre choisi explicitement via le bouton soleil/lune --- */
+:root[data-theme='dark'] {
+  --bg: #14140f;
+  --bg-raised: #1c1c16;
+  --bg-ink: #0b0b08;
+  --text: #f4f1e8;
+  --text-muted: #b9b4a6;
+  --text-on-ink: #f4f1e8;
+  --border: #3a382f;
+  --border-soft: #2a291f;
+
+  --color-corail-soft: rgba(231, 76, 60, 0.16);
+  --color-violet-soft: rgba(96, 85, 245, 0.2);
+  --color-bleu-soft: rgba(70, 183, 232, 0.18);
+  --color-vert-ink: #eaffc2;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 4px 10px rgba(0, 0, 0, 0.35), 0 16px 32px -12px rgba(0, 0, 0, 0.55);
+
+  color-scheme: dark;
+}
+
+/* --- Thème clair choisi explicitement (prioritaire sur la préférence système) --- */
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
