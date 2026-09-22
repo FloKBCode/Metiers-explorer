@@ -34,18 +34,27 @@ export interface FicheMetier {
 }
 
 // API "Marché du travail" (stats-offres-demandes-emploi) — indicateur salaire
-// médian par métier ROME. On ne type que les champs qu'on utilise réellement,
-// la réponse complète a beaucoup plus de champs (cf. doc Stoplight).
+// par métier ROME (converti en FAP côté France Travail). On ne type que les
+// champs qu'on utilise réellement. Forme vérifiée le 22/09 en observant une
+// vraie réponse (Accept: application/json — sans cet en-tête l'API renvoie
+// du XML) : ce n'est PAS un salaire médian unique mais, par période, une
+// ligne par sous-catégorie d'activité de la famille professionnelle, chacune
+// avec 3 montants (codeNomenclature SAL1/SAL2/SAL3 = débutant/expérimenté/
+// moyen, déduit de l'ordre des valeurs et du libellé de l'indicateur).
+export interface SalaireValeurMontant {
+  codeNomenclature?: string;
+  valeurPrincipaleMontant?: number;
+}
+
 export interface ValeurPeriodeIndicateur {
   codeActivite?: string;
   libActivite?: string;
+  codePeriode?: string;
   libPeriode?: string;
-  valeurPrincipaleNom?: string;
-  valeurPrincipaleMontant?: number;
+  salaireValeurMontant?: SalaireValeurMontant[];
 }
 
 export interface IndicateurSalaire {
   libIndicateur?: string;
-  libTerritoire?: string;
-  listeValeursParPeriode?: ValeurPeriodeIndicateur[];
+  valeursParPeriode?: ValeurPeriodeIndicateur[];
 }

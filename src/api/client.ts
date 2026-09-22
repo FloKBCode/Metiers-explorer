@@ -37,7 +37,11 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
   for (let tentative = 1; tentative <= NB_TENTATIVES_MAX; tentative++) {
     const response = await fetch(`${API_BASE_URL}${path}`, {
       ...options,
-      headers: { ...options.headers, Authorization: `Bearer ${token}` },
+      headers: {
+        Accept: "application/json",
+        ...options.headers,
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (response.status === 429 && tentative < NB_TENTATIVES_MAX) {
