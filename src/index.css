@@ -865,3 +865,49 @@ select.input {
     grid-template-columns: 1fr;
   }
 }
+
+/* ================= Indicateur salaire (Marché du travail) ================= */
+.salaire-card {
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-6);
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.salaire-card h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.salaire-card__montant {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.salaire-card__periode {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.salaire-card__source {
+  margin: var(--space-1) 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.salaire-card__loading,
+.salaire-card__empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}

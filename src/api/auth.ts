@@ -26,13 +26,16 @@ export async function getAccessToken(): Promise<string> {
     client_secret: clientSecret,
   };
 
-  // Scopes requis pour "ROME 4.0 - Fiches métiers" (visibles sur la page
-  // "Utiliser l'API" > Client Credentials OAuth Flow, une fois l'API
-  // souscrite) : api_rome-fiches-metiersv1 (obligatoire, donne accès à
-  // l'API) + nomenclatureRome (obligatoire, donne accès aux libellés du
-  // référentiel Métiers utilisés dans les réponses). Surchargeable via
-  // VITE_FT_SCOPE dans .env si jamais ça change.
-  const scope = import.meta.env.VITE_FT_SCOPE || "api_rome-fiches-metiersv1 nomenclatureRome";
+  // Un seul token OAuth pour toutes les API souscrites sur l'application
+  // France Travail — les scopes de chaque API s'additionnent simplement,
+  // espace-séparés (visibles sur la page "Utiliser l'API" > Client
+  // Credentials OAuth Flow de chaque API, une fois celle-ci souscrite) :
+  //  - ROME 4.0 - Fiches métiers : api_rome-fiches-metiersv1 + nomenclatureRome
+  //  - Marché du travail (salaires) : offresetdemandesemploi + api_stats-offres-demandes-emploiv1
+  // Surchargeable via VITE_FT_SCOPE dans .env si jamais ça change.
+  const scope =
+    import.meta.env.VITE_FT_SCOPE ||
+    "api_rome-fiches-metiersv1 nomenclatureRome offresetdemandesemploi api_stats-offres-demandes-emploiv1";
   if (scope) {
     params.scope = scope;
   }

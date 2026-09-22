@@ -3,6 +3,7 @@ import { useFetch } from '../hooks/useFetch'
 import { AsyncBoundary } from '../components/AsyncBoundary'
 import { useFavoris } from '../context/FavorisContext'
 import { NetworkGraphic } from '../components/graphics/NetworkGraphic'
+import { SalaireIndicateur } from '../components/SalaireIndicateur'
 import type { FicheMetier } from '../types'
 import { ROME_FICHES_METIERS_PATH } from '../api/client'
 
@@ -42,6 +43,8 @@ function MetierDetail() {
                 <NetworkGraphic variant="compact" />
               </div>
             </header>
+
+            <SalaireIndicateur codeRome={fiche.code} />
 
             {fiche.groupesCompetencesMobilisees && fiche.groupesCompetencesMobilisees.length > 0 && (
               <section className="fiche-metier__section">
