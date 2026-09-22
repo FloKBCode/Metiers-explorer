@@ -6,6 +6,7 @@ import { AsyncBoundary } from '../components/AsyncBoundary'
 import { useFavoris } from '../context/FavorisContext'
 import type { FicheMetier } from '../types'
 import { ROME_FICHES_METIERS_LISTE_PATH } from '../api/client'
+import { GRANDS_DOMAINES_ROME, domaineDuCode } from '../data/domainesRome'
 
 function SearchIcon() {
   return (
@@ -21,6 +22,7 @@ function MetiersListe() {
   const { estFavori, basculerFavori } = useFavoris()
   const state = useFetch<FicheMetier[]>(ROME_FICHES_METIERS_LISTE_PATH)
   const [recherche, setRecherche] = useState('')
+  const [domaine, setDomaine] = useState('')
   const [filtreSalaire, setFiltreSalaire] = useState(true)
 
   const fichesChargees = state.status === 'success' ? state.data : null
@@ -43,12 +45,14 @@ function MetiersListe() {
 
   const filtrerFiches = (fiches: FicheMetier[]) => {
     const terme = recherche.trim().toLowerCase()
-    if (!terme) return fiches
-    return fiches.filter(
-      (fiche) =>
+    return fiches.filter((fiche) => {
+      const correspondRecherche =
+        !terme ||
         fiche.metier.libelle.toLowerCase().includes(terme) ||
-        fiche.code.toLowerCase().includes(terme),
-    )
+        fiche.code.toLowerCase().includes(terme)
+      const correspondDomaine = !domaine || fiche.code.charAt(0).toUpperCase() === domaine
+      return correspondRecherche && correspondDomaine
+    })
   }
 
   return (
@@ -80,6 +84,19 @@ function MetiersListe() {
                     aria-label="Rechercher un métier"
                   />
                 </div>
+                <select
+                  className="input metiers-toolbar__domaine"
+                  value={domaine}
+                  onChange={(e) => setDomaine(e.target.value)}
+                  aria-label="Filtrer par domaine professionnel"
+                >
+                  <option value="">Tous les domaines</option>
+                  {Object.entries(GRANDS_DOMAINES_ROME).map(([lettre, libelle]) => (
+                    <option key={lettre} value={lettre}>
+                      {libelle}
+                    </option>
+                  ))}
+                </select>
                 <label className="metiers-toolbar__filtre">
                   <input
                     type="checkbox"
@@ -111,7 +128,12 @@ function MetiersListe() {
                   {resultatsAffiches.map((fiche) => (
                     <li key={fiche.code} className="card metier-card">
                       <div>
-                        <p className="metier-card__code">{fiche.code}</p>
+                        <p className="metier-card__code">
+                          {fiche.code}
+                          {domaineDuCode(fiche.code) && (
+                            <span className="metier-card__domaine"> · {domaineDuCode(fiche.code)}</span>
+                          )}
+                        </p>
                         <h3 className="metier-card__title">{fiche.metier.libelle}</h3>
                       </div>
                       <div className="metier-card__actions">

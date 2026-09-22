@@ -540,6 +540,12 @@ select.input {
   white-space: nowrap;
 }
 
+.metiers-toolbar__domaine {
+  width: auto;
+  max-width: 260px;
+  flex-shrink: 0;
+}
+
 .metiers-toolbar__filtre {
   display: flex;
   align-items: center;
@@ -589,6 +595,10 @@ select.input {
   font-size: 0.78rem;
   color: var(--text-muted);
   font-family: var(--font-text);
+}
+
+.metier-card__domaine {
+  font-style: italic;
 }
 
 .metier-card__actions {
