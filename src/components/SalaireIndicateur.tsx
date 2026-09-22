@@ -6,10 +6,8 @@ interface SalaireIndicateurProps {
   codeRome: string
 }
 
-const LIBELLES_NOMENCLATURE: Record<string, string> = {
-  SAL1: 'Débutant',
-  SAL2: 'Expérimenté',
-  SAL3: 'Moyen',
+function montant(ligne: ValeurPeriodeIndicateur, code: string): number | undefined {
+  return ligne.salaireValeurMontant?.find((m) => m.codeNomenclature === code)?.valeurPrincipaleMontant
 }
 
 function formatMontant(valeur: number | undefined): string | null {
@@ -19,10 +17,15 @@ function formatMontant(valeur: number | undefined): string | null {
 
 /**
  * Salaires observés pour un métier, depuis l'API France Travail "Marché du
- * travail" (données par famille professionnelle, convertie depuis le code
- * ROME côté France Travail). C'est un indicateur bonus : si l'appel échoue
- * (scope pas encore activé sur le compte, métier sans donnée FAP...), on
- * reste discret plutôt que d'afficher une grosse erreur rouge sur la fiche.
+ * travail". France Travail ne raisonne pas par métier ROME mais par famille
+ * professionnelle (FAP) : un même appel peut renvoyer plusieurs lignes
+ * (une par niveau de la famille — employé, technicien, ingénieur...). On
+ * met en avant, par ligne, le salaire moyen (gros chiffre) et la fourchette
+ * débutant/expérimenté en dessous, plutôt que 3 chiffres à plat de même
+ * poids visuel — plus lisible en un coup d'œil.
+ * C'est un indicateur bonus : si l'appel échoue (scope pas encore activé,
+ * métier sans donnée FAP...), on reste discret plutôt que d'afficher une
+ * grosse erreur rouge sur la fiche.
  */
 export function SalaireIndicateur({ codeRome }: SalaireIndicateurProps) {
   const state = useFetch<IndicateurSalaire>(buildSalaireParMetierPath(codeRome))
@@ -71,27 +74,37 @@ export function SalaireIndicateur({ codeRome }: SalaireIndicateurProps) {
   return (
     <div className="card salaire-card">
       <h4>Salaires observés (France entière)</h4>
+      {lignes.length > 1 && (
+        <p className="salaire-card__intro">
+          France Travail regroupe ce métier avec plusieurs niveaux d'une même famille
+          professionnelle :
+        </p>
+      )}
       <div className="salaire-card__lignes">
-        {lignes.map((ligne, index) => (
-          <div className="salaire-card__ligne" key={ligne.codeActivite ?? index}>
-            {ligne.libActivite && <p className="salaire-card__activite">{ligne.libActivite}</p>}
-            <div className="salaire-card__montants">
-              {ligne.salaireValeurMontant?.map((montant) => {
-                const texte = formatMontant(montant.valeurPrincipaleMontant)
-                if (!texte) return null
-                const label = montant.codeNomenclature
-                  ? LIBELLES_NOMENCLATURE[montant.codeNomenclature] ?? montant.codeNomenclature
-                  : null
-                return (
-                  <span className="salaire-card__montant-item" key={montant.codeNomenclature}>
-                    <strong>{texte}</strong>
-                    {label && <span className="salaire-card__montant-label">{label}</span>}
-                  </span>
-                )
-              })}
+        {lignes.map((ligne, index) => {
+          const moyen = formatMontant(montant(ligne, 'SAL3'))
+          const debutant = formatMontant(montant(ligne, 'SAL1'))
+          const experimente = formatMontant(montant(ligne, 'SAL2'))
+
+          return (
+            <div className="salaire-card__ligne" key={ligne.codeActivite ?? index}>
+              {ligne.libActivite && <p className="salaire-card__activite">{ligne.libActivite}</p>}
+              {moyen && (
+                <p className="salaire-card__moyen">
+                  <strong>{moyen}</strong>
+                  <span className="salaire-card__moyen-label">brut / mois en moyenne</span>
+                </p>
+              )}
+              {(debutant || experimente) && (
+                <p className="salaire-card__range">
+                  {debutant && <>Débutant : {debutant}</>}
+                  {debutant && experimente && ' · '}
+                  {experimente && <>Expérimenté : {experimente}</>}
+                </p>
+              )}
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
       {periodeRetenue && <p className="salaire-card__periode">{periodeRetenue}</p>}
       <p className="salaire-card__source">
