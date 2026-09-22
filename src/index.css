@@ -130,6 +130,7 @@ p {
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
+  box-sizing: border-box;
   border: 1px solid transparent;
   border-radius: var(--radius-pill);
   padding: 0.7em 1.35em;
@@ -205,6 +206,7 @@ p {
   flex-direction: column;
   gap: var(--space-2);
   text-align: left;
+  min-width: 0;
 }
 
 .field label {
@@ -215,6 +217,9 @@ p {
 
 .input,
 select.input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   font-family: var(--font-text);
   font-size: 1rem;
   padding: 0.75em 1em;
@@ -634,6 +639,12 @@ select.input {
 }
 
 /* ================= Formulaires métier / comparateur ================= */
+.formulaire-selection > .btn,
+.formulaire-comparateur > .btn {
+  width: 100%;
+  min-width: 0;
+}
+
 .page-formulaire,
 .page-comparateur {
   padding-block: var(--space-6) var(--space-8);
@@ -645,6 +656,9 @@ select.input {
   flex-direction: column;
   gap: var(--space-4);
   max-width: 480px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: var(--space-5);
   margin-top: var(--space-4);
 }
@@ -657,6 +671,7 @@ select.input {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-4);
+  min-width: 0;
 }
 
 @media (max-width: 600px) {
