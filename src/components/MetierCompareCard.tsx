@@ -6,7 +6,7 @@ interface MetierCompareCardProps {
 
 export default function MetierCompareCard({ metier }: MetierCompareCardProps) {
   return (
-    <div className="metier-compare-card">
+    <div className="card metier-compare-card">
       <h3>{metier.libelle}</h3>
       <p className="metier-code">Code ROME : {metier.codeRome}</p>
     </div>

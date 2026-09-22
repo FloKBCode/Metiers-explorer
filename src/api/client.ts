@@ -11,6 +11,16 @@ export const ROME_FICHES_METIERS_PATH = "/partenaire/rome-fiches-metiers/v1/fich
 // qui ont juste besoin de peupler une liste de métiers (liste, formulaire...).
 export const ROME_FICHES_METIERS_LISTE_PATH = `${ROME_FICHES_METIERS_PATH}?champs=code,metier(libelle,code)`;
 
+// API "Marché du travail" (stats-offres-demandes-emploi) : salaires médians
+// par métier ROME (converti en interne vers une FAP par France Travail),
+// à l'échelle nationale. Doc Stoplight vérifiée le 22/09 : GET
+// /v1/indicateur/salaire-rome-fap/{codeTypeTerritoire}/{codeTerritoire}?codeRome=...
+const MARCHE_TRAVAIL_SALAIRE_PATH = "/partenaire/stats-offres-demandes-emploi/v1/indicateur/salaire-rome-fap";
+
+export function buildSalaireParMetierPath(codeRome: string): string {
+  return `${MARCHE_TRAVAIL_SALAIRE_PATH}/NAT/FR?codeRome=${encodeURIComponent(codeRome)}`;
+}
+
 function attendre(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -27,7 +37,11 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
   for (let tentative = 1; tentative <= NB_TENTATIVES_MAX; tentative++) {
     const response = await fetch(`${API_BASE_URL}${path}`, {
       ...options,
-      headers: { ...options.headers, Authorization: `Bearer ${token}` },
+      headers: {
+        Accept: "application/json",
+        ...options.headers,
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (response.status === 429 && tentative < NB_TENTATIVES_MAX) {

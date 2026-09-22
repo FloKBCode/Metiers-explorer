@@ -1,111 +1,998 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import './styles/tokens.css';
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+/* ---------- Reset minimal ---------- */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
 }
 
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Texture "papier" très légère + grille topographique discrète en fond */
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(17, 24, 39, 0.05) 1px, transparent 0);
+  background-size: 22px 22px;
 }
 
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+ul,
+ol {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* ---------- Typo ---------- */
 h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  color: var(--text);
+  margin: 0 0 var(--space-3);
+  letter-spacing: -0.01em;
+  line-height: 1.12;
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+  font-size: clamp(2.1rem, 1.6rem + 2vw, 3.4rem);
+  font-weight: 800;
 }
+
 h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+  font-size: clamp(1.4rem, 1.2rem + 1vw, 2rem);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+p {
+  margin: 0 0 var(--space-3);
+  color: var(--text-muted);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ---------- Layout ---------- */
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding-inline: var(--space-5);
+}
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+.app-layout main {
+  flex: 1 1 auto;
+}
+
+.section {
+  padding-block: var(--space-7);
+}
+
+/* ---------- Boutons ---------- */
+.btn {
+  --btn-bg: var(--bg-ink);
+  --btn-fg: var(--text-on-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  padding: 0.7em 1.35em;
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-primary {
+  --btn-bg: var(--accent);
+  --btn-fg: var(--accent-contrast);
+}
+
+.btn-secondary {
+  --btn-bg: transparent;
+  --btn-fg: var(--text);
+  border-color: var(--border);
+}
+
+.btn-ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--text-muted);
+  padding-inline: 0.6em;
+}
+
+.btn-favori {
+  --btn-bg: var(--bg-raised);
+  --btn-fg: var(--text);
+  border-color: var(--border);
+  font-size: 0.85rem;
+  padding: 0.5em 1em;
+}
+
+.btn-favori[aria-pressed='true'] {
+  --btn-bg: var(--color-vert);
+  --btn-fg: var(--color-vert-ink);
+  border-color: transparent;
+}
+
+/* ---------- Cartes ---------- */
+.card {
+  background: var(--bg-raised);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+/* ---------- Champs / formulaires ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  text-align: left;
+  min-width: 0;
+}
+
+.field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.input,
+select.input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  font-family: var(--font-text);
+  font-size: 1rem;
+  padding: 0.75em 1em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  color: var(--text);
+}
+
+.input:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-color: var(--accent-2);
+}
+
+.search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-field svg {
+  position: absolute;
+  left: var(--space-4);
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-field .input {
+  width: 100%;
+  padding-left: calc(var(--space-4) * 2 + 18px);
+  border-radius: var(--radius-pill);
+}
+
+.erreur {
+  color: var(--accent-danger);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ---------- Tags / puces ---------- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.35em 0.85em;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: var(--color-line-soft);
+  color: var(--text);
+}
+
+.tag-savoir {
+  background: var(--color-bleu-soft);
+  color: #0b4864;
+}
+
+.tag-competence {
+  background: var(--color-vert);
+  color: var(--color-vert-ink);
+}
+
+/* ---------- Loader / erreurs ---------- */
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-7) var(--space-4);
+  color: var(--text-muted);
+}
+
+.loader__spinner {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
-p {
+
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+  color: var(--accent-danger);
+  background: var(--color-corail-soft);
+  border-radius: var(--radius-md);
+}
+
+/* ---------- Accessibilité ---------- */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+@media (max-width: 760px) {
+  .container {
+    padding-inline: var(--space-4);
+  }
+  .section {
+    padding-block: var(--space-6);
+  }
+}
+
+/* ================= Motif réseau ================= */
+.network-graphic {
+  width: 100%;
+  height: 100%;
+}
+
+.network-graphic--hero {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+.network-graphic--compact {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* ================= Header / nav ================= */
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.brand__mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-ink);
+}
+
+.brand__mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.site-nav a {
+  padding: 0.5em 1em;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+
+.site-nav a:hover {
+  color: var(--text);
+}
+
+.site-nav a.active {
+  color: var(--text);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-card);
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding-block: var(--space-5);
+  margin-top: var(--space-7);
+}
+
+.site-footer p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* ================= Home / hero ================= */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-8);
+  border-bottom: 1px solid var(--border);
+}
+
+.hero__panel {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-6);
+}
+
+.hero mark {
+  background: none;
+  color: var(--accent);
+  font-style: italic;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.hero__examples {
+  margin-top: var(--space-5);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
+  padding-block: var(--space-7);
+}
+
+.feature-grid__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.feature-grid__index {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+.feature-grid__item h3 {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+  .site-nav {
+    gap: var(--space-1);
+  }
+  .site-nav a {
+    padding: 0.5em 0.7em;
+    font-size: 0.82rem;
+  }
+}
+
+/* ================= Liste des métiers ================= */
+.page-header {
+  padding-block: var(--space-6) var(--space-4);
+}
+
+.metiers-toolbar {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-5);
+}
+
+.metiers-count {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.metiers-toolbar__filtre {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.metiers-toolbar__filtre input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.metiers-verif-progress {
+  flex-basis: 100%;
+  margin: calc(-1 * var(--space-3)) 0 var(--space-4);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.metiers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+  padding-bottom: var(--space-7);
+}
+
+.metier-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.metier-card__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+.metier-card__code {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-family: var(--font-text);
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+.metier-card__actions {
+  margin-top: auto;
+  display: flex;
+  gap: var(--space-2);
+}
+
+.empty-state {
+  padding: var(--space-7) var(--space-4);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* ================= Fiche métier ================= */
+.fiche-metier__back {
+  margin-bottom: var(--space-4);
+}
+
+.fiche-metier__header {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: var(--space-6);
+  align-items: center;
+  padding-block: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--space-6);
+}
+
+.fiche-metier__title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.fiche-metier__map {
+  justify-self: end;
+}
+
+.fiche-metier__section {
+  margin-bottom: var(--space-6);
+}
+
+.fiche-metier__group {
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.fiche-metier__group h4 {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.fiche-metier__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+@media (max-width: 760px) {
+  .fiche-metier__header {
+    grid-template-columns: 1fr;
+  }
+  .fiche-metier__map {
+    justify-self: start;
+    width: 140px;
+  }
+}
+
+/* ================= Formulaires métier / comparateur ================= */
+.formulaire-selection > .btn,
+.formulaire-comparateur > .btn {
+  width: 100%;
+  min-width: 0;
+}
+
+.page-formulaire,
+.page-comparateur {
+  padding-block: var(--space-6) var(--space-8);
+}
+
+.formulaire-selection,
+.formulaire-comparateur {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 480px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.formulaire-comparateur {
+  max-width: 720px;
+}
+
+.formulaire-comparateur .formulaire-comparateur__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+@media (max-width: 600px) {
+  .formulaire-comparateur .formulaire-comparateur__fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+.comparateur-resultats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+@media (max-width: 600px) {
+  .comparateur-resultats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.metier-compare-card {
+  padding: var(--space-5);
+}
+
+.metier-compare-card h3 {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+.metier-compare-card .metier-code {
+  margin: 0;
+  font-size: 0.82rem;
+}
+
+/* ================= 404 ================= */
+.page-notfound {
+  padding-block: var(--space-8);
+  text-align: center;
+}
+
+/* ================= Bouton de thème (soleil / lune) ================= */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  flex-shrink: 0;
+}
+
+.theme-toggle button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.theme-toggle button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.theme-toggle button.is-active {
+  background: var(--bg-ink);
+  color: var(--text-on-ink);
+}
+
+.theme-toggle button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ================= Badge de compteur (nav) ================= */
+.nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 5px;
+  margin-left: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+@media (max-width: 700px) {
+  .site-header .container {
+    flex-wrap: wrap;
+    row-gap: var(--space-2);
+  }
+  .site-nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+.fiche-metier__footer {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--space-6) var(--space-7);
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-6);
+}
+
+/* ================= Comparateur : résultats détaillés ================= */
+.comparateur-resultats-wrap {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.comparateur-communs {
+  padding: var(--space-5);
+}
+
+.comparateur-communs h3 {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: var(--space-3);
+}
+
+.comparateur-colonnes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.comparateur-colonne {
+  padding: var(--space-5);
+  text-align: left;
+}
+
+.comparateur-colonne h3 {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+.comparateur-colonne .metier-code {
+  margin-bottom: var(--space-4);
+}
+
+.comparateur-colonne__section {
+  margin-bottom: var(--space-4);
+}
+
+.comparateur-colonne__section:last-child {
+  margin-bottom: 0;
+}
+
+.comparateur-colonne__section h4 {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.tag--commun {
+  box-shadow: 0 0 0 2px var(--accent-2);
+  font-weight: 700;
+}
+
+@media (max-width: 700px) {
+  .comparateur-colonnes {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================= Indicateur salaire (Marché du travail) ================= */
+.salaire-card {
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  max-width: 560px;
+}
+
+.salaire-card__lignes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.salaire-card__ligne {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-soft);
+}
+
+.salaire-card__ligne:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.salaire-card__intro {
+  margin: 0 0 var(--space-1);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.salaire-card__activite {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.salaire-card__moyen {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.salaire-card__moyen strong {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.salaire-card__moyen-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.salaire-card__range {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.salaire-card h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.salaire-card__montant {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.salaire-card__periode {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.salaire-card__source {
+  margin: var(--space-1) 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.salaire-card__loading,
+.salaire-card__empty {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
