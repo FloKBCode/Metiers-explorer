@@ -26,8 +26,14 @@ export function SalaireIndicateur({ codeRome }: SalaireIndicateurProps) {
   }
 
   if (state.status === 'error') {
-    // Indicateur bonus : on ne casse pas la fiche métier pour ça.
-    return null
+    // Indicateur bonus : pas de gros encart rouge, mais on garde le detail
+    // visible en petit pour pouvoir diagnostiquer sans rouvrir les DevTools.
+    return (
+      <div className="card salaire-card">
+        <h4>Salaire médian (France entière)</h4>
+        <p className="salaire-card__empty">Indisponible : {state.error}</p>
+      </div>
+    )
   }
 
   const entree = state.data.listeValeursParPeriode?.find(
