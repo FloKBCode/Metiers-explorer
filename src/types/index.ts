@@ -7,5 +7,5 @@ export type RequestState<T> =
 export interface Metier {
   code: string;
   libelle: string;
-  // à compléter selon la vraie forme de la réponse de l'API ROME
+  domaine?: string;
 }
