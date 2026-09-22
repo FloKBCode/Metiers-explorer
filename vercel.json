@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/ft-auth/:path*",
+      "destination": "https://entreprise.francetravail.fr/:path*"
+    },
+    {
+      "source": "/ft-api/:path*",
+      "destination": "https://api.francetravail.io/:path*"
+    }
+  ]
+}
