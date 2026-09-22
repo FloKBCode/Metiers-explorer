@@ -342,7 +342,7 @@ select.input {
   position: absolute;
   inset: 0;
   z-index: 0;
-  opacity: 0.9;
+  opacity: 0.55;
 }
 
 .network-graphic--compact {
@@ -435,10 +435,15 @@ select.input {
   border-bottom: 1px solid var(--border);
 }
 
-.hero__content {
+.hero__panel {
   position: relative;
   z-index: 1;
   max-width: 640px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-6);
 }
 
 .hero mark {
@@ -763,5 +768,85 @@ select.input {
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
+  }
+}
+
+.fiche-metier__footer {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--space-6) var(--space-7);
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-6);
+}
+
+/* ================= Comparateur : résultats détaillés ================= */
+.comparateur-resultats-wrap {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.comparateur-communs {
+  padding: var(--space-5);
+}
+
+.comparateur-communs h3 {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: var(--space-3);
+}
+
+.comparateur-colonnes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.comparateur-colonne {
+  padding: var(--space-5);
+  text-align: left;
+}
+
+.comparateur-colonne h3 {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+.comparateur-colonne .metier-code {
+  margin-bottom: var(--space-4);
+}
+
+.comparateur-colonne__section {
+  margin-bottom: var(--space-4);
+}
+
+.comparateur-colonne__section:last-child {
+  margin-bottom: 0;
+}
+
+.comparateur-colonne__section h4 {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.tag--commun {
+  box-shadow: 0 0 0 2px var(--accent-2);
+  font-weight: 700;
+}
+
+@media (max-width: 700px) {
+  .comparateur-colonnes {
+    grid-template-columns: 1fr;
   }
 }

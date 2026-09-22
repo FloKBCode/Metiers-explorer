@@ -82,9 +82,11 @@ function MetierDetail() {
         )}
       </AsyncBoundary>
 
-      <p>
-        <Link to="/metiers">← Retour à la liste</Link>
-      </p>
+      <div className="fiche-metier__footer">
+        <Link to="/metiers" className="btn btn-secondary">
+          ← Retour à la liste
+        </Link>
+      </div>
     </section>
   )
 }

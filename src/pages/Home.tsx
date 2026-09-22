@@ -26,7 +26,10 @@ function Home() {
       <section className="hero">
         <NetworkGraphic variant="hero" />
         <div className="container">
-          <div className="hero__content">
+          {/* Le panneau a un fond plein : le motif réseau reste toujours en
+              arrière-plan, jamais derrière le texte (évite les collisions
+              de couleur, ex. un point corail sous un mot en corail). */}
+          <div className="hero__panel">
             <p className="eyebrow">Atlas des métiers · référentiel ROME 4.0</p>
             <h1>
               Trouve le métier <mark>qui te ressemble.</mark>
