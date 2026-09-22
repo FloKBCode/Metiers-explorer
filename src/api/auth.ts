@@ -49,7 +49,11 @@ export async function getAccessToken(): Promise<string> {
   });
 
   if (!response.ok) {
-    throw new Error(`Erreur d'authentification API: ${response.status}`);
+    // On remonte le detail renvoye par France Travail (ex. invalid_scope)
+    // plutot que juste le code HTTP, pour eviter de devoir rouvrir les
+    // DevTools a chaque fois qu'un scope est mal configure.
+    const detail = await response.text().catch(() => "");
+    throw new Error(`Erreur d'authentification API (${response.status})${detail ? ` : ${detail}` : ""}`);
   }
 
   const data: TokenResponse = await response.json();
