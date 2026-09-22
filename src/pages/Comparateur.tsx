@@ -40,36 +40,49 @@ export default function Comparateur() {
   }
 
   return (
-    <div className="page-comparateur">
+    <div className="container page-comparateur">
+      <p className="eyebrow">Comparer</p>
       <h1>Comparateur de métiers</h1>
 
       <AsyncBoundary state={state} loadingMessage="Chargement de la liste des métiers…">
         {(fiches) => (
           <>
-            <form onSubmit={(e) => handleSubmit(e, fiches)} className="formulaire-comparateur">
-              <div>
-                <label htmlFor="metier1">Premier métier</label>
-                <select id="metier1" value={codeMetier1} onChange={(e) => setCodeMetier1(e.target.value)}>
-                  <option value="">-- Choisir un métier --</option>
-                  {fiches.map((fiche) => (
-                    <option key={fiche.code} value={fiche.code}>{fiche.metier.libelle}</option>
-                  ))}
-                </select>
-              </div>
+            <form onSubmit={(e) => handleSubmit(e, fiches)} className="formulaire-comparateur card">
+              <div className="formulaire-comparateur__fields">
+                <div className="field">
+                  <label htmlFor="metier1">Premier métier</label>
+                  <select
+                    id="metier1"
+                    className="input"
+                    value={codeMetier1}
+                    onChange={(e) => setCodeMetier1(e.target.value)}
+                  >
+                    <option value="">-- Choisir un métier --</option>
+                    {fiches.map((fiche) => (
+                      <option key={fiche.code} value={fiche.code}>{fiche.metier.libelle}</option>
+                    ))}
+                  </select>
+                </div>
 
-              <div>
-                <label htmlFor="metier2">Deuxième métier</label>
-                <select id="metier2" value={codeMetier2} onChange={(e) => setCodeMetier2(e.target.value)}>
-                  <option value="">-- Choisir un métier --</option>
-                  {fiches.map((fiche) => (
-                    <option key={fiche.code} value={fiche.code}>{fiche.metier.libelle}</option>
-                  ))}
-                </select>
+                <div className="field">
+                  <label htmlFor="metier2">Deuxième métier</label>
+                  <select
+                    id="metier2"
+                    className="input"
+                    value={codeMetier2}
+                    onChange={(e) => setCodeMetier2(e.target.value)}
+                  >
+                    <option value="">-- Choisir un métier --</option>
+                    {fiches.map((fiche) => (
+                      <option key={fiche.code} value={fiche.code}>{fiche.metier.libelle}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {erreur && <p role="alert" className="erreur">{erreur}</p>}
 
-              <button type="submit">Comparer</button>
+              <button type="submit" className="btn btn-primary">Comparer</button>
             </form>
 
             {metier1 && metier2 && (

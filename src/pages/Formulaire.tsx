@@ -24,16 +24,18 @@ export default function Formulaire() {
   }
 
   return (
-    <div className="page-formulaire">
+    <div className="container page-formulaire">
+      <p className="eyebrow">Rechercher</p>
       <h1>Choisir un métier à consulter</h1>
 
       <AsyncBoundary state={state} loadingMessage="Chargement de la liste des métiers…">
         {(fiches) => (
-          <form onSubmit={handleSubmit} className="formulaire-selection">
-            <div>
+          <form onSubmit={handleSubmit} className="formulaire-selection card">
+            <div className="field">
               <label htmlFor="metier">Métier</label>
               <select
                 id="metier"
+                className="input"
                 value={codeMetier}
                 onChange={(e) => setCodeMetier(e.target.value)}
               >
@@ -52,7 +54,9 @@ export default function Formulaire() {
               </p>
             )}
 
-            <button type="submit">Voir la fiche métier</button>
+            <button type="submit" className="btn btn-primary">
+              Voir la fiche métier
+            </button>
           </form>
         )}
       </AsyncBoundary>

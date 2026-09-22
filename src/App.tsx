@@ -3,6 +3,7 @@ import Layout from './pages/Layout'
 import Home from './pages/Home'
 import MetiersListe from './pages/MetiersListe'
 import MetierDetail from './pages/MetierDetail'
+import Formulaire from './pages/Formulaire'
 import Comparateur from './pages/Comparateur'
 import NotFound from './pages/NotFound'
 import './App.css'
@@ -15,6 +16,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="metiers" element={<MetiersListe />} />
         <Route path="metiers/:codeRome" element={<MetierDetail />} />
+        <Route path="formulaire" element={<Formulaire />} />
         <Route path="comparateur" element={<Comparateur />} />
         {/* Route 404 : capte toute URL non définie */}
         <Route path="*" element={<NotFound />} />
