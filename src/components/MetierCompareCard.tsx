@@ -1,10 +1,11 @@
-﻿import type { Metier } from '../types';
+﻿import { memo } from 'react';
+import type { Metier } from '../types';
 
 interface MetierCompareCardProps {
   metier: Metier;
 }
 
-export default function MetierCompareCard({ metier }: MetierCompareCardProps) {
+function MetierCompareCard({ metier }: MetierCompareCardProps) {
   return (
     <div className="card metier-compare-card">
       <h3>{metier.libelle}</h3>
@@ -12,3 +13,5 @@ export default function MetierCompareCard({ metier }: MetierCompareCardProps) {
     </div>
   );
 }
+
+export default memo(MetierCompareCard);
