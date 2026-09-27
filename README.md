@@ -57,9 +57,7 @@ Voir aussi [BRANCHING.md](./BRANCHING.md) pour la méthode de travail avec Git, 
 
 ## Application déployée
 
-🔗 https://metiers-explorer.vercel.app
-
-⚠️ Déploiement de test (fait depuis un compte personnel via la Vercel CLI, le dépôt appartenant à FloKBCode). Les clés API (`VITE_FT_CLIENT_ID` / `VITE_FT_CLIENT_SECRET`) doivent encore être ajoutées dans les variables d'environnement du projet Vercel pour que les données réelles s'affichent — voir la PR `feature/deploiement`. Idéalement, FloKBCode connecte à terme le vrai dépôt GitHub à Vercel pour un déploiement automatique à chaque push.
+🔗 [https://metiers-explorer-amber.vercel.app](https://metiers-explorer-amber.vercel.app)
 
 ## Répartition du travail
 
