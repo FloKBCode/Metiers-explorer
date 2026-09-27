@@ -7,6 +7,10 @@
     {
       "source": "/ft-api/:path*",
       "destination": "https://api.francetravail.io/:path*"
+    },
+    {
+      "source": "/((?!ft-auth|ft-api)[^.]*)",
+      "destination": "/index.html"
     }
   ]
 }
