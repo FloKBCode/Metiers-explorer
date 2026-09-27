@@ -17,47 +17,49 @@ Projet réalisé dans le cadre du Bachelor 2 — React.js & TypeScript (formateu
 ## Installation (à faire par chaque membre de l'équipe)
 
 1. Cloner le dépôt :
-   ```bash
+```bash
    git clone https://github.com/FloKBCode/Metiers-explorer.git
    cd Metiers-explorer
-   ```
+```
 
 2. Installer Node.js (version 18 ou supérieure) si ce n'est pas déjà fait : https://nodejs.org
 
 3. Installer les dépendances du projet :
-   ```bash
+```bash
    npm install
-   ```
+```
 
 4. Créer un fichier `.env` à la racine à partir de `.env.example` :
-   ```bash
+```bash
    cp .env.example .env
-   ```
+```
    Puis demander à Florence les identifiants API (`VITE_FT_CLIENT_ID` et `VITE_FT_CLIENT_SECRET`) et les coller dans `.env`.
 
    ⚠️ Ce fichier `.env` ne doit jamais être commité (il est exclu via `.gitignore`).
 
 5. Lancer le serveur de développement :
-   ```bash
+```bash
    npm run dev
-   ```
+```
    L'application est accessible sur http://localhost:5173
 
 6. Lancer les tests :
-   ```bash
+```bash
    npm run test
-   ```
+```
 
 7. Build de production :
-   ```bash
+```bash
    npm run build
-   ```
+```
 
 Voir aussi [BRANCHING.md](./BRANCHING.md) pour la méthode de travail avec Git, et [PLANNING.md](./PLANNING.md) pour l'organisation dans le temps.
 
 ## Application déployée
 
-🔗 [URL à compléter après déploiement]
+🔗 https://metiers-explorer.vercel.app
+
+⚠️ Déploiement de test (fait depuis un compte personnel via la Vercel CLI, le dépôt appartenant à FloKBCode). Les clés API (`VITE_FT_CLIENT_ID` / `VITE_FT_CLIENT_SECRET`) doivent encore être ajoutées dans les variables d'environnement du projet Vercel pour que les données réelles s'affichent — voir la PR `feature/deploiement`. Idéalement, FloKBCode connecte à terme le vrai dépôt GitHub à Vercel pour un déploiement automatique à chaque push.
 
 ## Répartition du travail
 
